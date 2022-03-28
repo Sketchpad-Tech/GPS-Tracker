@@ -4,7 +4,7 @@
 '''
 
 import serial
-import pynmea3
+import pynmea2
 
 def port_setup(port):
     ser = serial.Serial(port, baudrate=9600, timeout=2)
@@ -16,7 +16,7 @@ def parseGPSdata(ser):
         gps_data = gps_data.decode("utf-8")
 
         if len(gps_data) > 5:  # Check to see if the GPS gave any useful data
-            if gps_data[0:6] in keyword:   # Check t see if the message code
+            if gps_data[0:6] in keywords:   # Check t see if the message code
                 gps_msg = pynmea2.parse(gps_data)
                 lat = gps_msg.latitude
                 lng = gps_msg.longitude
@@ -35,22 +35,22 @@ if __name__ == "__main__":
 
 
     # Print out GPS cordinates
-    print(GPS coordinates)
-    try:
-        while True:
+    print("GPS coordinates")
+    while True:
+        try:
             gps_coords = parseGPSdata(ser)
             if gps_coords is None:
                 print("No Data")
             else:
                 print(f"latitude: {gps_coords[0]}, longitude: {gps_coords[1]}")
 
-    except serial.SerialExcepton as e:
-        print(f"\nERROR: {e}")
-        print("... reconnecting to serial\n")
-        ser = port_setup
+        except serial.SerialException as e:
+            print(f"\nERROR: {e}")
+            print("... reconnecting to serial\n")
+            ser = port_setup
 
-    except KeyboardInterrupt as e:
-        print("--- Program shutting down ---")
-        break
+        except KeyboardInterrupt as e:
+            print("--- Program shutting down ---")
+            break
 
 
