@@ -47,7 +47,7 @@ if __name__ == "__main__":
         except serial.SerialException as e:
             print(f"\nERROR: {e}")
             print("... reconnecting to serial\n")
-            ser = port_setup
+            ser = port_setup()
 
         except KeyboardInterrupt as e:
             print("--- Program shutting down ---")
